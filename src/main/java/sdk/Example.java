@@ -5,12 +5,11 @@ import sdk.model.*;
 import java.math.BigDecimal;
 
 public class Example {
-    public void main(String[] args) throws Exception {
-        // todo
-        String caPath = "";
-        String cliCertPath = "";
-        String clientKey = "";
-        String publicKeyPath = "";
+    public static void main(String[] args) throws Exception {
+        String caPath = "resource/server/ca.crt";
+        String cliCertPath = "resource/server/test_client.crt";
+        String clientKey = "resource/server/test_client.key";
+        String publicKeyPath = "resource/public_key.pem";
 
         Client cli = new Client(cliCertPath, "", clientKey, "", caPath, publicKeyPath);
 
