@@ -1,0 +1,1 @@
+[document](https://github.com/affix6932/wallet-sdk/blob/main/readme.md#common)
