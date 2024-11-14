@@ -11,6 +11,10 @@ public class DepositDetailResp {
     private BigDecimal amount;
     private String blockNo;
     private String requestId;
+    private String from;
+    private BigDecimal fiatAmount;
+    private String symbol;
+    private BigDecimal exchangeRate;
 
     public String getChain() {
         return chain;
@@ -76,5 +80,36 @@ public class DepositDetailResp {
         this.requestId = requestId;
     }
 
+    public String getFrom() {
+        return from;
+    }
+
+    public void setFrom(String from) {
+        this.from = from;
+    }
+
+    public BigDecimal getFiatAmount() {
+        return fiatAmount;
+    }
+
+    public void setFiatAmount(BigDecimal fiatAmount) {
+        this.fiatAmount = fiatAmount;
+    }
+
+    public String getSymbol() {
+        return symbol;
+    }
+
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
+    }
+
+    public BigDecimal getExchangeRate() {
+        return exchangeRate;
+    }
+
+    public void setExchangeRate(BigDecimal exchangeRate) {
+        this.exchangeRate = exchangeRate;
+    }
 }
 
