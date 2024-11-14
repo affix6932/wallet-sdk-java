@@ -1,10 +1,10 @@
 package sdk;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.security.interfaces.RSAPublicKey;
-import java.util.HexFormat;
 import java.util.Random;
 import okhttp3.RequestBody;
 import sdk.encrypt.AESEncryptECB;
@@ -21,22 +21,26 @@ public class Request {
     private static final String CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     private static final String DIGITS = "0123456789";
 
-    private static String sign(String broker, String ts, String nonce, byte[] body) throws NoSuchAlgorithmException {
+    private static String sign(String broker, String ts, String nonce, byte[] body) throws NoSuchAlgorithmException, IOException {
         // Create the byte array to append the body and header values
         ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
-        byteStream.writeBytes(body);
-        byteStream.writeBytes(broker.getBytes());
-        byteStream.writeBytes(ts.getBytes());
-        byteStream.writeBytes(nonce.getBytes());
+        byteStream.write(body);
+        byteStream.write(broker.getBytes());
+        byteStream.write(ts.getBytes());
+        byteStream.write(nonce.getBytes());
         // Compute the SHA-256 hash
         MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
         byte[] hash = sha256.digest(byteStream.toByteArray());
 
         // Convert the hash to hex
-        String hexHash = HexFormat.of().formatHex(hash);
+        StringBuilder hexString = new StringBuilder();
+
+        for (byte b : hash) {
+            hexString.append(String.format("%02x", b));
+        }
 
         // Extract the substring from index 16 to 48 (exclusive) as in Go code
-        return hexHash.substring(16, 48);
+        return hexString.substring(16, 48);
     }
 
     public static okhttp3.Request buildRequest(String url, String path, byte[] body, String broker, RSAPublicKey pubkey) throws Exception {

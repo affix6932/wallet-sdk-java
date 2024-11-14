@@ -1,6 +1,7 @@
 package sdk.encrypt;
 
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -28,8 +29,17 @@ public class Rsa {
 
         if (rsaPath != null && !rsaPath.isEmpty()) {
             // Read the RSA file
-            try (FileInputStream fileInputStream = new FileInputStream(new File(rsaPath))) {
-                keyBytes = fileInputStream.readAllBytes();
+            try (FileInputStream fileInputStream = new FileInputStream(rsaPath);
+                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
+
+                byte[] buffer = new byte[1024];
+                int bytesRead;
+
+                while ((bytesRead = fileInputStream.read(buffer)) != -1) {
+                    byteArrayOutputStream.write(buffer, 0, bytesRead);
+                }
+
+                keyBytes = byteArrayOutputStream.toByteArray();
             } catch (IOException e) {
                 throw new IOException("Error reading RSA file", e);
             }
