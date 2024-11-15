@@ -23,7 +23,7 @@ public class Client {
     private final OkHttpClient client;
     private RSAPublicKey publicKey;
 
-    Client(String clientCertPath, String clientCertPassword,
+    public Client(String clientCertPath, String clientCertPassword,
            String clientKeyPath, String keystorePassword,
            String caCertPath,
            String pubKeyPath) throws Exception {
