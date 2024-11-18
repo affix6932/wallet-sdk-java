@@ -20,29 +20,32 @@ public class Rsa {
         java.security.Security.addProvider(new BouncyCastleProvider());
     }
 
+    public static byte[] getBytes(String path) throws Exception {
+        // Read the RSA file
+        try (FileInputStream fileInputStream = new FileInputStream(path);
+             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
+
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+
+            while ((bytesRead = fileInputStream.read(buffer)) != -1) {
+                byteArrayOutputStream.write(buffer, 0, bytesRead);
+            }
+
+            return byteArrayOutputStream.toByteArray();
+        } catch (IOException e) {
+            throw new IOException("Error reading RSA file", e);
+        }
+    }
+
     public static RSAPublicKey toRsaPublicKey(String rsaPath, byte[] rsaBytes) throws Exception {
         if ((rsaPath == null || rsaPath.isEmpty()) && (rsaBytes == null || rsaBytes.length == 0)) {
             throw new IllegalArgumentException("Either rsaPath or rsaBytes must be provided");
         }
-
         byte[] keyBytes = rsaBytes;
 
         if (rsaPath != null && !rsaPath.isEmpty()) {
-            // Read the RSA file
-            try (FileInputStream fileInputStream = new FileInputStream(rsaPath);
-                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
-
-                byte[] buffer = new byte[1024];
-                int bytesRead;
-
-                while ((bytesRead = fileInputStream.read(buffer)) != -1) {
-                    byteArrayOutputStream.write(buffer, 0, bytesRead);
-                }
-
-                keyBytes = byteArrayOutputStream.toByteArray();
-            } catch (IOException e) {
-                throw new IOException("Error reading RSA file", e);
-            }
+            keyBytes = getBytes(rsaPath);
         }
 
         // Parse PEM bytes into RSAPublicKey
