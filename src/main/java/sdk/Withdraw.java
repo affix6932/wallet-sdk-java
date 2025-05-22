@@ -1,8 +1,11 @@
 package sdk;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import sdk.model.*;
+
+import java.math.BigDecimal;
 
 public class Withdraw {
     private final Wallet wallet;
@@ -17,8 +20,14 @@ public class Withdraw {
         this.wallet = wallet;
     }
 
+    public Gson gson() {
+        return new GsonBuilder()
+                .registerTypeAdapter(BigDecimal.class, new BigDecimalAsStringTypeAdapter())
+                .create();
+    }
+
     public Resp<WithdrawResp> DoWithdraw(WithdrawReq req) throws Exception {
-        Gson gson = new Gson();
+        Gson gson = this.gson();
         String body = gson.toJson(req, WithdrawReq.class);
 
         TypeToken<Resp<WithdrawResp>> typeToken = new TypeToken<Resp<WithdrawResp>>() {
@@ -28,7 +37,7 @@ public class Withdraw {
     }
 
     public Resp<WithdrawResp> DoWithdrawSymbol(WithdrawSymbolReq req) throws Exception {
-        Gson gson = new Gson();
+        Gson gson = this.gson();
         String body = gson.toJson(req, WithdrawSymbolReq.class);
 
         TypeToken<Resp<WithdrawResp>> typeToken = new TypeToken<Resp<WithdrawResp>>() {
@@ -38,7 +47,7 @@ public class Withdraw {
     }
 
     public Resp<WithdrawDetailResp> QueryWithdrawDetail(WithdrawDetailReq req) throws Exception {
-        Gson gson = new Gson();
+        Gson gson = this.gson();
         String body = gson.toJson(req, WithdrawDetailReq.class);
 
         TypeToken<Resp<WithdrawDetailResp>> typeToken = new TypeToken<Resp<WithdrawDetailResp>>() {
@@ -48,7 +57,7 @@ public class Withdraw {
     }
 
     public Resp<ExchangeRateResp> QueryExchangeRate(ExchangeRateReq req) throws Exception {
-        Gson gson = new Gson();
+        Gson gson = this.gson();
         String body = gson.toJson(req, ExchangeRateReq.class);
 
         TypeToken<Resp<ExchangeRateResp>> typeToken = new TypeToken<Resp<ExchangeRateResp>>() {
@@ -58,7 +67,7 @@ public class Withdraw {
     }
 
     public Resp<ExchangeRateFloatResp> QueryExchangeRateFloat(ExchangeRateReq req) throws Exception {
-        Gson gson = new Gson();
+        Gson gson = this.gson();
         String body = gson.toJson(req, ExchangeRateReq.class);
 
         TypeToken<Resp<ExchangeRateFloatResp>> typeToken = new TypeToken<Resp<ExchangeRateFloatResp>>() {

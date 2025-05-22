@@ -1,5 +1,8 @@
 package sdk.model;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.math.BigDecimal;
 
 public class WithdrawReq {
@@ -10,14 +13,53 @@ public class WithdrawReq {
     private String to;
     private String tag;
 
-    public WithdrawReq(String requestId, BigDecimal amount, String coin, String network, String to, String tag) {
+    private String extra;
+
+    public static class Extra {
+        private String user;
+        private BigDecimal fiatAmount;
+        private BigDecimal exchangeRate;
+
+        public String getUser() {
+            return user;
+        }
+        public void setUser(String user) {
+            this.user = user;
+        }
+        public BigDecimal getFiatAmount() {
+            return fiatAmount;
+        }
+        public void setFiatAmount(BigDecimal fiatAmount) {
+            this.fiatAmount = fiatAmount;
+        }
+        public BigDecimal getExchangeRate() {
+            return exchangeRate;
+        }
+        public void setExchangeRate(BigDecimal exchangeRate) {
+            this.exchangeRate = exchangeRate;
+        }
+        public Extra(String user, BigDecimal fiatAmount, BigDecimal exchangeRate) {
+            this.user = user;
+            this.fiatAmount = fiatAmount;
+            this.exchangeRate = exchangeRate;
+        }
+    }
+
+    public WithdrawReq(String requestId, BigDecimal amount, String coin, String network, String to, String tag, Extra extra) {
         this.requestId = requestId;
         this.amount = amount;
         this.coin = coin;
         this.network = network;
         this.to = to;
         this.tag = tag;
-
+        if (extra == null) {
+            this.extra = "";
+        } else {
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(BigDecimal.class, new BigDecimalAsStringTypeAdapter())
+                    .create();
+            this.extra = gson.toJson(extra, Extra.class);
+        }
     }
 
     public String getRequestId() {
@@ -68,4 +110,11 @@ public class WithdrawReq {
         this.tag = tag;
     }
 
+    public String getExtra() {
+        return extra;
+    }
+
+    public void setExtra(String extra) {
+        this.extra = extra;
+    }
 }
