@@ -39,7 +39,7 @@ public class Example {
 
         Withdraw withdraw = new Withdraw(w);
 
-        WithdrawReq withdrawReq = new WithdrawReq("abc9", new BigDecimal("0.001"), "USDT", "TON", "EQAkhkg79yqAqbG6", "23");
+        WithdrawReq withdrawReq = new WithdrawReq("abc9", new BigDecimal("0.001"), "USDT", "TON", "EQAkhkg79yqAqbG6", "23", null);
         Resp<WithdrawResp> resp2 = withdraw.DoWithdraw(withdrawReq);
         System.out.println(resp2.getCode());
         System.out.println(resp2.getData());
