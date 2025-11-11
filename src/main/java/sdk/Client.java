@@ -28,8 +28,8 @@ public class Client {
     public Client(String clientCertPath, String clientCertPassword,
                   String clientKeyPath, String keystorePassword,
                   String caCertPath,
-                  String pubKeyPath) throws Exception {
-        this.client = createClient(clientCertPath, clientCertPassword, clientKeyPath, keystorePassword, caCertPath, pubKeyPath);
+                  String pubKeyPath, Proxy proxy) throws Exception {
+        this.client = createClient(clientCertPath, clientCertPassword, clientKeyPath, keystorePassword, caCertPath, pubKeyPath, proxy);
     }
 
     public OkHttpClient getClient() {
@@ -44,7 +44,7 @@ public class Client {
             byte[] clientCertBytes, String clientCertPassword,
             byte[] clientKeyBytes, String keystorePassword,
             byte[] caCertBytes,
-            byte[] pubKeyBytes) throws Exception {
+            byte[] pubKeyBytes, Proxy proxy) throws Exception {
 
         Security.addProvider(new BouncyCastleProvider());
 
@@ -85,16 +85,24 @@ public class Client {
 
         SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
 
-        return new OkHttpClient.Builder()
-                .sslSocketFactory(sslSocketFactory, (X509TrustManager) trustManagerFactory.getTrustManagers()[0])
-                .build();
+        if (null == proxy) {
+            return new OkHttpClient.Builder()
+                    .sslSocketFactory(sslSocketFactory, (X509TrustManager) trustManagerFactory.getTrustManagers()[0])
+                    .build();
+        } else {
+            return new OkHttpClient.Builder()
+                    .proxy(proxy)
+                    .sslSocketFactory(sslSocketFactory, (X509TrustManager) trustManagerFactory.getTrustManagers()[0])
+                    .build();
+        }
+
     }
 
     private OkHttpClient createClient(
             String clientCertPath, String clientCertPassword,
             String clientKeyPath, String keystorePassword,
             String caCertPath,
-            String pubKeyPath) throws Exception {
+            String pubKeyPath, Proxy proxy) throws Exception {
 
         Security.addProvider(new BouncyCastleProvider());
 
@@ -136,19 +144,27 @@ public class Client {
 
         SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
 
-        return new OkHttpClient.Builder()
-                .sslSocketFactory(sslSocketFactory, (X509TrustManager) trustManagerFactory.getTrustManagers()[0])
-                .build();
+        if (proxy == null) {
+            return new OkHttpClient.Builder()
+                    .sslSocketFactory(sslSocketFactory, (X509TrustManager) trustManagerFactory.getTrustManagers()[0])
+                    .build();
+        } else {
+            return new OkHttpClient.Builder()
+                    .proxy(proxy)
+                    .sslSocketFactory(sslSocketFactory, (X509TrustManager) trustManagerFactory.getTrustManagers()[0])
+                    .build();
+        }
+
     }
 
     public static Client getInstance(String clientCertPath, String clientCertPassword,
                                      String clientKeyPath, String keystorePassword,
                                      String caCertPath,
-                                     String pubKeyPath) throws Exception {
+                                     String pubKeyPath, Proxy proxy) throws Exception {
         if (instance == null) {
             synchronized (Client.class) {
                 if (instance == null) {
-                    instance = new Client(clientCertPath, clientCertPassword, clientKeyPath, keystorePassword, caCertPath, pubKeyPath);
+                    instance = new Client(clientCertPath, clientCertPassword, clientKeyPath, keystorePassword, caCertPath, pubKeyPath, proxy);
                 }
             }
         }
@@ -158,11 +174,11 @@ public class Client {
     public static Client getInstance(byte[] clientCertPath, String clientCertPassword,
                                      byte[] clientKeyPath, String keystorePassword,
                                      byte[] caCertPath,
-                                     byte[] pubKeyPath) throws Exception {
+                                     byte[] pubKeyPath, Proxy proxy) throws Exception {
         if (instance == null) {
             synchronized (Client.class) {
                 if (instance == null) {
-                    instance = new Client(clientCertPath, clientCertPassword, clientKeyPath, keystorePassword, caCertPath, pubKeyPath);
+                    instance = new Client(clientCertPath, clientCertPassword, clientKeyPath, keystorePassword, caCertPath, pubKeyPath, proxy);
                 }
             }
         }
@@ -172,7 +188,7 @@ public class Client {
     public Client(byte[] clientCertPath, String clientCertPassword,
                   byte[] clientKeyPath, String keystorePassword,
                   byte[] caCertPath,
-                  byte[] pubKeyPath) throws Exception {
-        this.client = createClient(clientCertPath, clientCertPassword, clientKeyPath, keystorePassword, caCertPath, pubKeyPath);
+                  byte[] pubKeyPath, Proxy proxy) throws Exception {
+        this.client = createClient(clientCertPath, clientCertPassword, clientKeyPath, keystorePassword, caCertPath, pubKeyPath, proxy);
     }
 }
