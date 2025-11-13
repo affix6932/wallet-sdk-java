@@ -11,7 +11,7 @@ public class Example {
         String clientKey = "resource/server/test_client.key";
         String publicKeyPath = "resource/public_key.pem";
 
-        Client cli = new Client(cliCertPath, "", clientKey, "", caPath, publicKeyPath);
+        Client cli = new Client(cliCertPath, "", clientKey, "", caPath, publicKeyPath, null, false);
 
         // todo
         Wallet w = new Wallet("", "", cli);
